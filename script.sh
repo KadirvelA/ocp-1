@@ -1,30 +1,30 @@
 #!/bin/bash
 
-# Clean up previous directories if any
-echo "Cleaning up previous files..."
-rm -rf trivia-app
+# Clean up any previous content
+echo "Cleaning up previous directories..."
+rm -rf simple-quiz-app
 
-# Create necessary directories
+# Create new directory structure
 echo "Creating directory structure..."
-mkdir -p trivia-app/trivia-backend
-mkdir -p trivia-app/trivia-frontend
-mkdir -p trivia-app/k8s
+mkdir -p simple-quiz-app/backend
+mkdir -p simple-quiz-app/frontend
+mkdir -p simple-quiz-app/k8s
 
-# Go into the root directory where trivia-app will reside
-cd trivia-app
+# Go into the new directory
+cd simple-quiz-app
 
 # Create the README file
 echo "Creating README.md..."
 cat <<EOL > README.md
-# Trivia App
+# Simple Quiz App
 
-This is a simple Trivia application with frontend and backend, using Docker and Kubernetes.
+This is a simple quiz application with a backend and frontend. It uses Docker, Kubernetes, and GitHub Actions for CI/CD.
 
 EOL
 
 # Create the backend Dockerfile
 echo "Creating backend Dockerfile..."
-cat <<EOL > trivia-backend/Dockerfile
+cat <<EOL > backend/Dockerfile
 # Use official Node.js image
 FROM node:16
 
@@ -42,33 +42,36 @@ COPY . .
 EXPOSE 3000
 
 # Command to run the backend
-CMD ["node", "index.js"]
+CMD ["node", "server.js"]
 EOL
 
-# Create the backend app (index.js)
-echo "Creating backend app (index.js)..."
-cat <<EOL > trivia-backend/index.js
+# Create the backend app (server.js)
+echo "Creating backend app (server.js)..."
+cat <<EOL > backend/server.js
 const express = require('express');
 const app = express();
 
-app.get('/trivia', (req, res) => {
-  res.json({ question: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"] });
+app.get('/quiz', (req, res) => {
+  res.json({
+    question: "What is the capital of Japan?",
+    options: ["Tokyo", "Beijing", "Seoul", "Bangkok"]
+  });
 });
 
 const port = 3000;
 app.listen(port, () => {
-  console.log(\`Trivia app backend listening at http://localhost:\${port}\`);
+  console.log(\`Quiz backend is running on http://localhost:\${port}\`);
 });
 EOL
 
 # Create the backend package.json
 echo "Creating backend package.json..."
-cat <<EOL > trivia-backend/package.json
+cat <<EOL > backend/package.json
 {
-  "name": "trivia-backend",
+  "name": "quiz-backend",
   "version": "1.0.0",
-  "description": "Backend for Trivia app",
-  "main": "index.js",
+  "description": "Backend for the Simple Quiz App",
+  "main": "server.js",
   "dependencies": {
     "express": "^4.17.1"
   }
@@ -77,11 +80,11 @@ EOL
 
 # Create the frontend Dockerfile
 echo "Creating frontend Dockerfile..."
-cat <<EOL > trivia-frontend/Dockerfile
-# Use official Nginx image to serve the frontend
+cat <<EOL > frontend/Dockerfile
+# Use Nginx to serve the frontend
 FROM nginx:alpine
 
-# Copy static files to Nginx's default public folder
+# Copy static files into the Nginx container
 COPY . /usr/share/nginx/html
 
 # Expose frontend port
@@ -90,23 +93,22 @@ EOL
 
 # Create the frontend app (index.html)
 echo "Creating frontend app (index.html)..."
-cat <<EOL > trivia-frontend/index.html
+cat <<EOL > frontend/index.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trivia App</title>
+    <title>Simple Quiz App</title>
 </head>
 <body>
-    <h1>Trivia App</h1>
+    <h1>Welcome to the Quiz App!</h1>
     <div id="question"></div>
     <script>
-        fetch('/trivia')
+        fetch('/quiz')
             .then(response => response.json())
             .then(data => {
                 document.getElementById('question').innerHTML = data.question;
-                // Display options
                 data.options.forEach(option => {
                     const button = document.createElement('button');
                     button.textContent = option;
@@ -120,24 +122,25 @@ EOL
 
 # Create Kubernetes manifests for backend and frontend
 echo "Creating Kubernetes manifests..."
+
 cat <<EOL > k8s/backend-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: trivia-backend
+  name: quiz-backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: trivia-backend
+      app: quiz-backend
   template:
     metadata:
       labels:
-        app: trivia-backend
+        app: quiz-backend
     spec:
       containers:
-      - name: trivia-backend
-        image: trivia-backend:latest
+      - name: quiz-backend
+        image: quiz-backend:latest
         ports:
         - containerPort: 3000
 EOL
@@ -146,10 +149,10 @@ cat <<EOL > k8s/backend-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: trivia-backend
+  name: quiz-backend
 spec:
   selector:
-    app: trivia-backend
+    app: quiz-backend
   ports:
     - protocol: TCP
       port: 80
@@ -160,20 +163,20 @@ cat <<EOL > k8s/frontend-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: trivia-frontend
+  name: quiz-frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: trivia-frontend
+      app: quiz-frontend
   template:
     metadata:
       labels:
-        app: trivia-frontend
+        app: quiz-frontend
     spec:
       containers:
-      - name: trivia-frontend
-        image: trivia-frontend:latest
+      - name: quiz-frontend
+        image: quiz-frontend:latest
         ports:
         - containerPort: 80
 EOL
@@ -182,10 +185,10 @@ cat <<EOL > k8s/frontend-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: trivia-frontend
+  name: quiz-frontend
 spec:
   selector:
-    app: trivia-frontend
+    app: quiz-frontend
   ports:
     - protocol: TCP
       port: 80
@@ -221,18 +224,18 @@ jobs:
       - name: Build and Push Docker Image for Backend
         uses: docker/build-push-action@v4
         with:
-          context: ./trivia-backend
-          file: ./trivia-backend/Dockerfile
+          context: ./backend
+          file: ./backend/Dockerfile
           push: true
-          tags: yourdockerhub/trivia-backend:latest
+          tags: yourdockerhub/quiz-backend:latest
 
       - name: Build and Push Docker Image for Frontend
         uses: docker/build-push-action@v4
         with:
-          context: ./trivia-frontend
-          file: ./trivia-frontend/Dockerfile
+          context: ./frontend
+          file: ./frontend/Dockerfile
           push: true
-          tags: yourdockerhub/trivia-frontend:latest
+          tags: yourdockerhub/quiz-frontend:latest
 EOL
 
 # Final success message

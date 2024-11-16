@@ -28,7 +28,7 @@ jobs:
           context: ./trivia-backend
           file: ./trivia-backend/Dockerfile
           push: true
-          tags: yourdockerhubusername/trivia-backend:latest
+          tags: kadirvel1/trivia-backend:latest
 
       - name: Build and Push Frontend Docker Image
         uses: docker/build-push-action@v2
@@ -36,4 +36,4 @@ jobs:
           context: ./trivia-frontend
           file: ./trivia-frontend/Dockerfile
           push: true
-          tags: yourdockerhubusername/trivia-frontend:latest
+          tags: kadirvel1/trivia-frontend:latest
