@@ -8,9 +8,6 @@ BACKEND_DIR="$ROOT_DIR/trivia-backend"
 FRONTEND_DIR="$ROOT_DIR/trivia-frontend"
 K8S_DIR="$ROOT_DIR/k8s"
 
-# GitHub Actions directory
-GITHUB_ACTIONS_DIR="$ROOT_DIR/.github/workflows"
-
 # Create the root project directory
 mkdir -p $ROOT_DIR
 
@@ -130,55 +127,6 @@ RUN npm run build
 # Serve the build with a static file server
 RUN npm install -g serve
 CMD ["serve", "-s", "build", "-l", "5000"]
-EOL
-
-# GitHub Actions setup
-echo "Setting up GitHub Actions..."
-
-# Create .github/workflows directory
-mkdir -p $GITHUB_ACTIONS_DIR
-
-# Create GitHub Actions workflow for CI
-cat <<EOL > $GITHUB_ACTIONS_DIR/ci.yml
-name: CI for Trivia App
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: \${{ secrets.DOCKER_USERNAME }}
-          password: \${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Build and Push Backend Docker Image
-        uses: docker/build-push-action@v2
-        with:
-          context: ./trivia-backend
-          file: ./trivia-backend/Dockerfile
-          push: true
-          tags: yourdockerhubusername/trivia-backend:latest
-
-      - name: Build and Push Frontend Docker Image
-        uses: docker/build-push-action@v2
-        with:
-          context: ./trivia-frontend
-          file: ./trivia-frontend/Dockerfile
-          push: true
-          tags: yourdockerhubusername/trivia-frontend:latest
 EOL
 
 # Kubernetes setup

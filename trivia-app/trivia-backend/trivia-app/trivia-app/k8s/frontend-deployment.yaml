@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trivia-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trivia-frontend
+  template:
+    metadata:
+      labels:
+        app: trivia-frontend
+    spec:
+      containers:
+      - name: trivia-frontend
+        image: yourdockerhubusername/trivia-frontend:latest
+        ports:
+        - containerPort: 5000
