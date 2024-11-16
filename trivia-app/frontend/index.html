@@ -3,21 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Quiz App</title>
+    <title>Trivia App</title>
 </head>
 <body>
-    <h1>Welcome to the Quiz App!</h1>
-    <div id="question"></div>
+    <h1>Trivia App</h1>
+    <div id="questions"></div>
+
     <script>
-        fetch('/quiz')
+        // Fetch questions from the backend
+        fetch('http://<BACKEND_SERVICE_IP>:8080/api/questions')
             .then(response => response.json())
             .then(data => {
-                document.getElementById('question').innerHTML = data.question;
-                data.options.forEach(option => {
-                    const button = document.createElement('button');
-                    button.textContent = option;
-                    document.body.appendChild(button);
+                const questionsDiv = document.getElementById('questions');
+                data.forEach((question, index) => {
+                    const questionElem = document.createElement('div');
+                    questionElem.innerHTML = `
+                        <p><strong>${index + 1}. ${question.question}</strong></p>
+                        <ul>
+                            ${question.options.map(option => `<li>${option}</li>`).join('')}
+                        </ul>
+                    `;
+                    questionsDiv.appendChild(questionElem);
                 });
+            })
+            .catch(err => {
+                console.error('Failed to fetch questions:', err);
+                document.getElementById('questions').innerHTML = '<p>Failed to load questions.</p>';
             });
     </script>
 </body>
