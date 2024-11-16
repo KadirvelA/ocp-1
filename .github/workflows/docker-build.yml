@@ -12,8 +12,8 @@ jobs:
     steps:
       - name: List directory structure
         run: |
-          ls -R ../../trivia-app
-          ls -R ../../trivia-app/backend
+          ls -R ./trivia-app
+          ls -R ./trivia-app/backend
 
       - name: Checkout repository
         uses: actions/checkout@v3
