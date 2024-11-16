@@ -11,7 +11,7 @@ COPY backend/go.mod backend/go.sum ./
 RUN go mod tidy
 
 # Copy backend source code into the container
-COPY backend/ ./
+COPY backend/ .
 
 # Build the Go application
 RUN go build -o trivia-app main.go
