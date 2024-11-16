@@ -26,6 +26,6 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./Dockerfile
+          file: ./trivia-app/Dockerfile
           push: true
           tags: akadirvel1/trivia-app:latest
