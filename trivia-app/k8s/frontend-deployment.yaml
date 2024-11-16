@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: akadirvel1/trivia-frontend-frontend:latest
+        image: akadirvel1/trivia-frontend:latest
         ports:
         - containerPort: 80

@@ -37,21 +37,4 @@ jobs:
         docker build -t akadirvel1/trivia-frontend:latest trivia-app/frontend
         docker push akadirvel1/trivia-frontend:latest
 
-    # Update Kubernetes manifests
-    - name: Update backend image in Kubernetes manifests
-      run: |
-        sed -i "s|image: .*trivia-backend:.*|image: akadirvel1/trivia-backend:latest|" trivia-app/k8s/backend-deployment.yaml
-
-    - name: Update frontend image in Kubernetes manifests
-      run: |
-        sed -i "s|image: .*trivia-frontend:.*|image: akadirvel1/trivia-frontend:latest|" trivia-app/k8s/frontend-deployment.yaml
-
-    # Commit changes
-    - name: Commit updated Kubernetes manifests
-      run: |
-        git config --global user.name "GitHub Actions"
-        git config --global user.email "actions@github.com"
-        git pull
-        git commit -am "Update Kubernetes manifests with latest image tags"
-        git push
-
+   
