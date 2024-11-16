@@ -1,18 +1,20 @@
-# Use official Node.js image
+# Use Node.js image
 FROM node:16
 
-# Set working directory
+# Set the working directory inside the container
 WORKDIR /app
 
+# Copy the package.json file to the container
+COPY trivia-app/trivia-backend/package.json ./  
+
 # Install dependencies
-COPY package.json ./
 RUN npm install
 
-# Copy the rest of the app code
-COPY . .
+# Copy the backend source code
+COPY trivia-app/trivia-backend/index.js ./index.js
 
-# Expose backend port
+# Expose the port
 EXPOSE 3000
 
-# Command to run the backend
-CMD ["node", "server.js"]
+# Command to start the backend
+CMD ["node", "index.js"]

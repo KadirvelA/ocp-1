@@ -1,8 +1,8 @@
-# Use Nginx to serve the frontend
+# Use a simple Nginx image for static content
 FROM nginx:alpine
 
-# Copy static files into the Nginx container
-COPY . /usr/share/nginx/html
+# Copy the frontend files to the appropriate directory
+COPY trivia-app/trivia-frontend/index.html /usr/share/nginx/html/index.html
 
-# Expose frontend port
+# Expose port 80 to serve the app
 EXPOSE 80
