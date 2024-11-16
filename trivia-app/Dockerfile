@@ -1,8 +1,8 @@
+# Dockerfile
 FROM golang:1.20
 
 WORKDIR /app
-COPY backend/main.go .
-COPY backend/index.html .
+COPY ./backend/ .
 
 RUN go build -o trivia-app main.go
 
