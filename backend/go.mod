@@ -1,3 +1,3 @@
 module github.com/akadmin-ai/backend
 
-go 1.18
+go 1.19
