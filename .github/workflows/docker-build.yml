@@ -29,3 +29,4 @@ jobs:
           file: ./trivia-app/Dockerfile
           push: true
           tags: akadirvel1/trivia-app:latest
+          no-cache: true
