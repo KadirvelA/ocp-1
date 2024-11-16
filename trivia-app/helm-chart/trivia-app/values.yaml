@@ -1,0 +1,5 @@
+image:
+  repository: your-dockerhub-user/trivia-app
+  tag: latest
+appname: trivia-app
+replicas: 2
