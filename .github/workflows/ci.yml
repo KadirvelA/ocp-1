@@ -55,7 +55,7 @@ jobs:
       run: |
             git config --global user.name 'Kadirvel'
             git config --global user.email 'a.kadirvel@gmail.com'
-            git pull --rebase
+            git pull
             git add $backend_deployment $frontend_deployment
             git commit -m "Update image tags to $new_image_tag"
             git push
