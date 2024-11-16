@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: trivia-backend
-        image: trivia-backend:latest
+        image: akadirvel1/trivia-backend:latest
         ports:
         - containerPort: 3000
