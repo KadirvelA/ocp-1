@@ -28,7 +28,7 @@ jobs:
           context: ./trivia-app/trivia-backend  # Build context for backend
           file: ./trivia-app/trivia-backend/Dockerfile
           push: true
-          tags: kadirvel1/trivia-backend:latest
+          tags: akadirvel1/trivia-backend:latest
 
       - name: Build Frontend Docker Image
         uses: docker/build-push-action@v4
@@ -36,4 +36,4 @@ jobs:
           context: ./trivia-app/trivia-frontend  # Build context for frontend
           file: ./trivia-app/trivia-frontend/Dockerfile
           push: true
-          tags: kadirvel1/trivia-frontend:latest
+          tags: akadirvel1/trivia-frontend:latest
