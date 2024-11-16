@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Clean up any existing directories or files
+# Clean up previous directories if any
 echo "Cleaning up previous files..."
 rm -rf trivia-app
 
-# Create the necessary directories
+# Create necessary directories
 echo "Creating directory structure..."
 mkdir -p trivia-app/trivia-backend
 mkdir -p trivia-app/trivia-frontend
