@@ -1,12 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: trivia-backend-service
+  name: trivia-backend
 spec:
   selector:
     app: trivia-backend
   ports:
     - protocol: TCP
-      port: 3001
-      targetPort: 3001
-  type: ClusterIP
+      port: 80
+      targetPort: 3000

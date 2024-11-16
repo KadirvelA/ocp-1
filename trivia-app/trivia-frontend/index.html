@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia App</title>
+</head>
+<body>
+    <h1>Trivia App</h1>
+    <div id="question"></div>
+    <script>
+        fetch('/trivia')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('question').innerHTML = data.question;
+                // Display options
+                data.options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.textContent = option;
+                    document.body.appendChild(button);
+                });
+            });
+    </script>
+</body>
+</html>
