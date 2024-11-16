@@ -15,4 +15,4 @@ COPY . .
 EXPOSE 3000
 
 # Command to run the backend
-CMD ["node", "index.js"]
+CMD ["node", "server.js"]

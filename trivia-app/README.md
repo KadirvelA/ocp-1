@@ -1,4 +1,4 @@
-# Trivia App
+# Simple Quiz App
 
-This is a simple Trivia application with frontend and backend, using Docker and Kubernetes.
+This is a simple quiz application with a backend and frontend. It uses Docker, Kubernetes, and GitHub Actions for CI/CD.
 

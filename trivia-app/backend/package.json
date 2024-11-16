@@ -1,8 +1,8 @@
 {
   "name": "trivia-backend",
   "version": "1.0.0",
-  "description": "Backend for Trivia app",
-  "main": "index.js",
+  "description": "Backend for the Simple Quiz App",
+  "main": "server.js",
   "dependencies": {
     "express": "^4.17.1"
   }

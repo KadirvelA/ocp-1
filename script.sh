@@ -2,16 +2,16 @@
 
 # Clean up any previous content
 echo "Cleaning up previous directories..."
-rm -rf simple-quiz-app
+rm -rf trivia-app
 
 # Create new directory structure
 echo "Creating directory structure..."
-mkdir -p simple-quiz-app/backend
-mkdir -p simple-quiz-app/frontend
-mkdir -p simple-quiz-app/k8s
+mkdir -p trivia-app/backend
+mkdir -p trivia-app/frontend
+mkdir -p trivia-app/k8s
 
 # Go into the new directory
-cd simple-quiz-app
+cd trivia-app
 
 # Create the README file
 echo "Creating README.md..."
@@ -68,7 +68,7 @@ EOL
 echo "Creating backend package.json..."
 cat <<EOL > backend/package.json
 {
-  "name": "quiz-backend",
+  "name": "trivia-backend",
   "version": "1.0.0",
   "description": "Backend for the Simple Quiz App",
   "main": "server.js",
@@ -127,20 +127,20 @@ cat <<EOL > k8s/backend-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: quiz-backend
+  name: trivia-backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: quiz-backend
+      app: trivia-backend
   template:
     metadata:
       labels:
-        app: quiz-backend
+        app: trivia-backend
     spec:
       containers:
-      - name: quiz-backend
-        image: quiz-backend:latest
+      - name: trivia-backend
+        image: trivia-backend:latest
         ports:
         - containerPort: 3000
 EOL
@@ -149,10 +149,10 @@ cat <<EOL > k8s/backend-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: quiz-backend
+  name: trivia-backend
 spec:
   selector:
-    app: quiz-backend
+    app: trivia-backend
   ports:
     - protocol: TCP
       port: 80
@@ -163,20 +163,20 @@ cat <<EOL > k8s/frontend-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: quiz-frontend
+  name: trivia-frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: quiz-frontend
+      app: trivia-frontend
   template:
     metadata:
       labels:
-        app: quiz-frontend
+        app: trivia-frontend
     spec:
       containers:
-      - name: quiz-frontend
-        image: quiz-frontend:latest
+      - name: trivia-frontend
+        image: trivia-frontend:latest
         ports:
         - containerPort: 80
 EOL
@@ -185,10 +185,10 @@ cat <<EOL > k8s/frontend-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: quiz-frontend
+  name: trivia-frontend
 spec:
   selector:
-    app: quiz-frontend
+    app: trivia-frontend
   ports:
     - protocol: TCP
       port: 80
@@ -227,7 +227,7 @@ jobs:
           context: ./backend
           file: ./backend/Dockerfile
           push: true
-          tags: yourdockerhub/quiz-backend:latest
+          tags: akadirvel1/trivia-backend:latest
 
       - name: Build and Push Docker Image for Frontend
         uses: docker/build-push-action@v4
@@ -235,7 +235,7 @@ jobs:
           context: ./frontend
           file: ./frontend/Dockerfile
           push: true
-          tags: yourdockerhub/quiz-frontend:latest
+          tags: akadirvel1/trivia-frontend:latest
 EOL
 
 # Final success message
