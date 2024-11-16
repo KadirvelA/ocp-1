@@ -1,10 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: quiz-frontend
+  name: frontend-service
+  namespace: trivia
 spec:
+  type: LoadBalancer
   selector:
-    app: quiz-frontend
+    app: trivia-frontend
   ports:
     - protocol: TCP
       port: 80
+      targetPort: 80
