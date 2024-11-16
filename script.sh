@@ -237,4 +237,3 @@ EOL
 
 # Final success message
 echo "Setup complete! You can now run the app locally, build the Docker images, or use Kubernetes."
-
