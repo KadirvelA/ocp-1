@@ -1,9 +1,91 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Trivia App Frontend</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Trivia App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f7f9fc;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    #question {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #555;
+    }
+    #options {
+      margin-top: 20px;
+    }
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
 </head>
 <body>
-    <h1>Welcome to the Trivia App Frontend!</h1>
+  <h1>Welcome to the Trivia App!</h1>
+  <div id="question">Click the button to get a trivia question!</div>
+  <div id="options"></div>
+  <button onclick="generateTrivia()">Get a New Question</button>
+
+  <script>
+    const triviaQuestions = [
+      {
+        question: "What is the capital of France?",
+        options: ["Paris", "London", "Berlin", "Madrid"],
+        answer: "Paris"
+      },
+      {
+        question: "Which planet is known as the Red Planet?",
+        options: ["Earth", "Mars", "Jupiter", "Venus"],
+        answer: "Mars"
+      },
+      {
+        question: "Who wrote 'Hamlet'?",
+        options: ["Charles Dickens", "J.K. Rowling", "William Shakespeare", "Mark Twain"],
+        answer: "William Shakespeare"
+      },
+      {
+        question: "What is the largest ocean on Earth?",
+        options: ["Atlantic", "Indian", "Pacific", "Arctic"],
+        answer: "Pacific"
+      },
+      {
+        question: "What year did World War II end?",
+        options: ["1945", "1939", "1950", "1940"],
+        answer: "1945"
+      }
+    ];
+
+    function generateTrivia() {
+      const trivia = triviaQuestions[Math.floor(Math.random() * triviaQuestions.length)];
+      document.getElementById('question').textContent = trivia.question;
+      
+      const optionsDiv = document.getElementById('options');
+      optionsDiv.innerHTML = '';
+      trivia.options.forEach(option => {
+        const button = document.createElement('button');
+        button.textContent = option;
+        button.onclick = () => alert(option === trivia.answer ? 'Correct!' : 'Wrong Answer!');
+        optionsDiv.appendChild(button);
+      });
+    }
+  </script>
 </body>
 </html>
