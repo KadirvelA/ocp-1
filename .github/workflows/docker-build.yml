@@ -10,11 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: List files to verify the directory structure
-        run: |
-          ls -R .  # List everything in the root directory to see if trivia-app exists
-          ls -R trivia-app  # List the contents of trivia-app
-          ls -R trivia-app/backend  # List the contents of backend
+    
 
       - name: Checkout repository
         uses: actions/checkout@v3
