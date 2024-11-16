@@ -5,24 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simple Trivia App</title>
   <style>
+    /* Apply a dark overlay on the background image */
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      background-color: #f7f9fc;
+      background-image: url('devops.gif');
+      background-size: cover;
+      background-position: center;
       margin: 0;
       padding: 20px;
+      height: 100vh;
+      color: white;
     }
+    
+    /* Dark overlay to make the content more readable */
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7); /* Dark, semi-transparent overlay */
+      z-index: -1;
+    }
+
     h1 {
-      color: #333;
+      color: #fff;
+      margin-top: 20px;
+      font-size: 36px;
+      font-weight: bold;
     }
+
     #question {
       margin-top: 20px;
       font-size: 18px;
-      color: #555;
+      color: #fff;
     }
+
     #options {
       margin-top: 20px;
     }
+
     button {
       margin: 5px;
       padding: 10px 20px;
@@ -33,12 +56,35 @@
       border: none;
       border-radius: 5px;
     }
+
     button:hover {
       background-color: #45a049;
     }
+    
+    /* Styling the buttons with dark theme */
+    button {
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #444;
+    }
+    
+    /* Styling the question and button container */
+    #options button {
+      margin: 10px;
+      background-color: #444;
+    }
+
   </style>
 </head>
 <body>
+  <!-- Overlay div to darken the background image -->
+  <div class="overlay"></div>
+
   <h1>Welcome to the Trivia App!</h1>
   <div id="question">Click the button to get a trivia question!</div>
   <div id="options"></div>
@@ -69,7 +115,8 @@
       {
         question: "What year did World War II end?",
         options: ["1945", "1939", "1950", "1940"],
-        answer: "1939"      }
+        answer: "1945"
+      }
     ];
 
     function generateTrivia() {
