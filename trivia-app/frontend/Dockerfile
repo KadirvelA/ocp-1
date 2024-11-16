@@ -1,8 +1,6 @@
-# Use Nginx to serve the frontend
 FROM nginx:alpine
 
-# Copy static files into the Nginx container
-COPY . /usr/share/nginx/html
+COPY index.html /usr/share/nginx/html/index.html
 
-# Expose frontend port
 EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

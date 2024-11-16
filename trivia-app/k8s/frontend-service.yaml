@@ -1,11 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: trivia-frontend
+  name: frontend
 spec:
-  selector:
-    app: trivia-frontend
   type: LoadBalancer
+  selector:
+    app: frontend
   ports:
-    - protocol: TCP
-      port: 80
+  - protocol: TCP
+    port: 80
+    targetPort: 80

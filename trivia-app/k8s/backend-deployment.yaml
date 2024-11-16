@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: trivia-backend
+  name: backend
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: trivia-backend
+      app: backend
   template:
     metadata:
       labels:
-        app: trivia-backend
+        app: backend
     spec:
       containers:
-      - name: trivia-backend
-        image: akadirvel1/trivia-backend:latest
+      - name: backend
+        image: akadirvel1/trivia-frontend-backend:latest
         ports:
-        - containerPort: 3000
+        - containerPort: 5000

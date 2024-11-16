@@ -1,242 +1,154 @@
 #!/bin/bash
 
-# Clean up any previous content
-echo "Cleaning up previous directories..."
-rm -rf trivia-app
+# Set variables
+REGISTRY="akadirvel1/trivia-frontend"
+APP_DIR="trivia-app"
 
-# Create new directory structure
-echo "Creating directory structure..."
-mkdir -p trivia-app/backend
-mkdir -p trivia-app/frontend
-mkdir -p trivia-app/k8s
+# Clean up old directories
+rm -rf "$APP_DIR"
+mkdir -p "$APP_DIR/backend" "$APP_DIR/frontend" "$APP_DIR/k8s"
 
-# Go into the new directory
-cd trivia-app
+# Create backend files
+cat <<EOF > "$APP_DIR/backend/app.py"
+from flask import Flask, jsonify
 
-# Create the README file
-echo "Creating README.md..."
-cat <<EOL > README.md
-# Simple Quiz App
+app = Flask(__name__)
 
-This is a simple quiz application with a backend and frontend. It uses Docker, Kubernetes, and GitHub Actions for CI/CD.
+@app.route("/")
+def home():
+    return jsonify({"message": "Welcome to the Flask Backend!"})
 
-EOL
+@app.route("/health")
+def health():
+    return jsonify({"status": "UP"})
 
-# Create the backend Dockerfile
-echo "Creating backend Dockerfile..."
-cat <<EOL > backend/Dockerfile
-# Use official Node.js image
-FROM node:16
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+EOF
 
-# Set working directory
+cat <<EOF > "$APP_DIR/backend/requirements.txt"
+Flask==2.1.2
+EOF
+
+cat <<EOF > "$APP_DIR/backend/Dockerfile"
+FROM python:3.9-slim
+
 WORKDIR /app
 
-# Install dependencies
-COPY package.json ./
-RUN npm install
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
-# Copy the rest of the app code
-COPY . .
+COPY app.py .
 
-# Expose backend port
-EXPOSE 3000
+EXPOSE 5000
+CMD ["python", "app.py"]
+EOF
 
-# Command to run the backend
-CMD ["node", "server.js"]
-EOL
-
-# Create the backend app (server.js)
-echo "Creating backend app (server.js)..."
-cat <<EOL > backend/server.js
-const express = require('express');
-const app = express();
-
-app.get('/quiz', (req, res) => {
-  res.json({
-    question: "What is the capital of Japan?",
-    options: ["Tokyo", "Beijing", "Seoul", "Bangkok"]
-  });
-});
-
-const port = 3000;
-app.listen(port, () => {
-  console.log(\`Quiz backend is running on http://localhost:\${port}\`);
-});
-EOL
-
-# Create the backend package.json
-echo "Creating backend package.json..."
-cat <<EOL > backend/package.json
-{
-  "name": "trivia-backend",
-  "version": "1.0.0",
-  "description": "Backend for the Simple Quiz App",
-  "main": "server.js",
-  "dependencies": {
-    "express": "^4.17.1"
-  }
-}
-EOL
-
-# Create the frontend Dockerfile
-echo "Creating frontend Dockerfile..."
-cat <<EOL > frontend/Dockerfile
-# Use Nginx to serve the frontend
-FROM nginx:alpine
-
-# Copy static files into the Nginx container
-COPY . /usr/share/nginx/html
-
-# Expose frontend port
-EXPOSE 80
-EOL
-
-# Create the frontend app (index.html)
-echo "Creating frontend app (index.html)..."
-cat <<EOL > frontend/index.html
+# Create frontend files
+cat <<EOF > "$APP_DIR/frontend/index.html"
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Quiz App</title>
+    <title>Trivia App Frontend</title>
 </head>
 <body>
-    <h1>Welcome to the Quiz App!</h1>
-    <div id="question"></div>
-    <script>
-        fetch('/quiz')
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('question').innerHTML = data.question;
-                data.options.forEach(option => {
-                    const button = document.createElement('button');
-                    button.textContent = option;
-                    document.body.appendChild(button);
-                });
-            });
-    </script>
+    <h1>Welcome to the Trivia App Frontend!</h1>
 </body>
 </html>
-EOL
+EOF
 
-# Create Kubernetes manifests for backend and frontend
-echo "Creating Kubernetes manifests..."
+cat <<EOF > "$APP_DIR/frontend/Dockerfile"
+FROM nginx:alpine
 
-cat <<EOL > k8s/backend-deployment.yaml
+COPY index.html /usr/share/nginx/html/index.html
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+EOF
+
+# Create Kubernetes manifests
+cat <<EOF > "$APP_DIR/k8s/backend-deployment.yaml"
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: trivia-backend
+  name: backend
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: trivia-backend
+      app: backend
   template:
     metadata:
       labels:
-        app: trivia-backend
+        app: backend
     spec:
       containers:
-      - name: trivia-backend
-        image: trivia-backend:latest
+      - name: backend
+        image: $REGISTRY-backend:latest
         ports:
-        - containerPort: 3000
-EOL
+        - containerPort: 5000
+EOF
 
-cat <<EOL > k8s/backend-service.yaml
+cat <<EOF > "$APP_DIR/k8s/backend-service.yaml"
 apiVersion: v1
 kind: Service
 metadata:
-  name: trivia-backend
+  name: backend
 spec:
+  type: LoadBalancer
   selector:
-    app: trivia-backend
+    app: backend
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 3000
-EOL
+  - protocol: TCP
+    port: 80
+    targetPort: 5000
+EOF
 
-cat <<EOL > k8s/frontend-deployment.yaml
+cat <<EOF > "$APP_DIR/k8s/frontend-deployment.yaml"
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: trivia-frontend
+  name: frontend
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: trivia-frontend
+      app: frontend
   template:
     metadata:
       labels:
-        app: trivia-frontend
+        app: frontend
     spec:
       containers:
-      - name: trivia-frontend
-        image: trivia-frontend:latest
+      - name: frontend
+        image: $REGISTRY-frontend:latest
         ports:
         - containerPort: 80
-EOL
+EOF
 
-cat <<EOL > k8s/frontend-service.yaml
+cat <<EOF > "$APP_DIR/k8s/frontend-service.yaml"
 apiVersion: v1
 kind: Service
 metadata:
-  name: trivia-frontend
+  name: frontend
 spec:
+  type: LoadBalancer
   selector:
-    app: trivia-frontend
+    app: frontend
   ports:
-    - protocol: TCP
-      port: 80
-EOL
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+EOF
 
-# Create GitHub Actions workflow for CI/CD
-echo "Creating GitHub Actions CI/CD workflow..."
-mkdir -p .github/workflows
-cat <<EOL > .github/workflows/docker-build-push.yml
-name: Build and Push Docker Image
+# Build and push Docker images
+docker build -t $REGISTRY-backend:latest "$APP_DIR/backend"
+docker build -t $REGISTRY-frontend:latest "$APP_DIR/frontend"
 
-on:
-  push:
-    branches:
-      - main
+docker push $REGISTRY-backend:latest
+docker push $REGISTRY-frontend:latest
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+# Deploy Kubernetes manifests
+kubectl apply -f "$APP_DIR/k8s/"
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: \${{ secrets.DOCKER_USERNAME }}
-          password: \${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Build and Push Docker Image for Backend
-        uses: docker/build-push-action@v4
-        with:
-          context: ./backend
-          file: ./backend/Dockerfile
-          push: true
-          tags: akadirvel1/trivia-backend:latest
-
-      - name: Build and Push Docker Image for Frontend
-        uses: docker/build-push-action@v4
-        with:
-          context: ./frontend
-          file: ./frontend/Dockerfile
-          push: true
-          tags: akadirvel1/trivia-frontend:latest
-EOL
-
-# Final success message
-echo "Setup complete! You can now run the app locally, build the Docker images, or use Kubernetes."
+echo "Setup complete! Access the frontend and backend using their LoadBalancer IPs."
