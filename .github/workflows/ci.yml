@@ -1,4 +1,4 @@
-name: Build and Push Docker Images
+name: CI/CD for Trivia App
 
 on:
   push:
@@ -6,58 +6,56 @@ on:
       - main
 
 jobs:
-  build:
+  update-image-tags:
+    name: Update Image Tags
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout Repository
+      uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+    - name: Configure Git
+      run: |
+        git config --global user.name "GitHub Actions Bot"
+        git config --global user.email "github-actions-bot@example.com"
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Update Image Tag for Trivia App
+      run: |
+        # Define the correct paths to your deployment YAML files
+        backend_deployment="trivia-app/k8s/backend-deployment.yaml"
+        frontend_deployment="trivia-app/k8s/frontend-deployment.yaml"
 
-      - name: Build Backend Docker Image
-        uses: docker/build-push-action@v4
-        with:
-          context: ./trivia-app/trivia-backend  # Build context for backend
-          file: ./trivia-app/trivia-backend/Dockerfile
-          push: true
-          tags: akadirvel1/trivia-backend:latest
+        # Ensure the files exist
+        if [[ ! -f $backend_deployment ]]; then
+          echo "Error: Backend deployment file not found at $backend_deployment"
+          exit 1
+        fi
 
-      - name: Build Frontend Docker Image
-        uses: docker/build-push-action@v4
-        with:
-          context: ./trivia-app/trivia-frontend  # Build context for frontend
-          file: ./trivia-app/trivia-frontend/Dockerfile
-          push: true
-          tags: akadirvel1/trivia-frontend:latest
-      
-      - name: Set Environment Variables
-        run: |
-            app_dir="trivia-app/k8s"
-            backend_deployment="$app_dir/backend-deployment.yaml"
-            frontend_deployment="$app_dir/frontend-deployment.yaml"
-            new_image_tag=${{ github.sha }}
+        if [[ ! -f $frontend_deployment ]]; then
+          echo "Error: Frontend deployment file not found at $frontend_deployment"
+          exit 1
+        fi
+
+        # Fetch the new image tag
+        new_image_tag=${{ github.sha }}
+
+        # Update backend and frontend image tags
+        sed -i "s|image: .*trivia-backend:.*|image: trivia-backend:$new_image_tag|" "$backend_deployment"
+        sed -i "s|image: .*trivia-frontend:.*|image: trivia-frontend:$new_image_tag|" "$frontend_deployment"
+
+        echo "Updated backend and frontend image tags to $new_image_tag"
+
+    # - name: Commit and Push Changes
+    #   run: |
+    #     git pull --rebase
+    #     git add trivia-app/k8s/*.yaml
+    #     git commit -m "Update image tags to ${{ github.sha }}"
+    #     git push
         
-      - name: Update Backend Image Tag
-        run: |
-            sed -i "s|image: .*trivia-backend:.*|image: trivia-backend:$new_image_tag|" $backend_deployment
-        
-      - name: Update Frontend Image Tag
-        run: |
-            sed -i "s|image: .*trivia-frontend:.*|image: trivia-frontend:$new_image_tag|" $frontend_deployment
-        
-      - name: Commit the Changes
-        run: |
+    - name: Commit the Changes
+      run: |
             git config --global user.name 'Kadirvel'
             git config --global user.email 'a.kadirvel@gmail.com'
-            git pull
+            git pull --rebase
             git add $backend_deployment $frontend_deployment
             git commit -m "Update image tags to $new_image_tag"
             git push
