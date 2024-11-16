@@ -37,3 +37,28 @@ jobs:
           file: ./trivia-app/trivia-frontend/Dockerfile
           push: true
           tags: akadirvel1/trivia-frontend:latest
+      
+      - name: Set Environment Variables
+        run: |
+            app_dir="trivia-app/k8s"
+            backend_deployment="$app_dir/backend-deployment.yaml"
+            frontend_deployment="$app_dir/frontend-deployment.yaml"
+            new_image_tag=${{ github.sha }}
+        
+      - name: Update Backend Image Tag
+        run: |
+            sed -i "s|image: .*trivia-backend:.*|image: trivia-backend:$new_image_tag|" $backend_deployment
+        
+      - name: Update Frontend Image Tag
+        run: |
+            sed -i "s|image: .*trivia-frontend:.*|image: trivia-frontend:$new_image_tag|" $frontend_deployment
+        
+      - name: Commit the Changes
+        run: |
+            git config --global user.name 'Kadirvel'
+            git config --global user.email 'a.kadirvel@gmail.com'
+            git pull
+            git add $backend_deployment $frontend_deployment
+            git commit -m "Update image tags to $new_image_tag"
+            git push
+        
