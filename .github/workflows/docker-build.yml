@@ -25,4 +25,4 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: your-dockerhub-user/trivia-app:latest
+        tags: akadirvel1/trivia-app:latest
