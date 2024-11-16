@@ -24,15 +24,15 @@ jobs:
       - name: Build and Push Docker Image for Backend
         uses: docker/build-push-action@v4
         with:
-          context: ./backend
-          file: ./trivia-app/backend/Dockerfile
+          context: ./trivia-app/backend
+          file: Dockerfile
           push: true
           tags: akadirvel1/trivia-backend:latest
 
       - name: Build and Push Docker Image for Frontend
         uses: docker/build-push-action@v4
         with:
-          context: ./frontend
-          file: ./trivia-app/frontend/Dockerfile
+          context: ./trivia-app/frontend
+          file: Dockerfile
           push: true
           tags: akadirvel1/trivia-frontend:latest
