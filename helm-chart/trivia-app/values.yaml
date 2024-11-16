@@ -1,5 +1,0 @@
-image:
-  repository: akadirvel1/trivia-app
-  tag: latest
-appname: trivia-app
-replicas: 2
