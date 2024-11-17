@@ -26,10 +26,23 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
 
-    # Build and push frontend image
-    - name: Build and push frontend Docker image
+    - name: Build and Push Docker Image
       run: |
-        docker build --no-cache -t akadirvel1/trivia-frontend:latest trivia-app/frontend
-        docker push akadirvel1/trivia-frontend:latest
+          docker build -t akadirvel1/trivia-frontend:${{ github.sha }} .
+          docker push akadirvel1/trivia-frontend:${{ github.sha }}
 
+    - name: Update Image Tag in Helm Chart
+      run: |
+          chart_dir="k8s"
+          new_image_tag=${{ github.sha }}
+          sed -i "s/^  tag: .*/  tag: $new_image_tag/" "$chart_dir/values.yaml"
+
+    - name: Commit the changes made
+      run: |
+          git config --global user.name 'Kadirvel'
+          git config --global user.email 'a.kadirvel@gmail.com'
+          git pull --rebase
+          git add k8s/values.yaml
+          git commit -m "Updating image tag to ${{ github.sha }}"
+          git push
    

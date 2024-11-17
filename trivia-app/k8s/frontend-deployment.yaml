@@ -1,24 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: trivia-frontend
+  name: {{ .Values.appname }}
   labels:
-    app: trivia-frontend
-  annotations:
-    redeploy: "{{timestamp}}" # Add this annotation
+    app: {{ .Values.appname }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
-      app: trivia-frontend
+      app: {{ .Values.appname }}
   template:
     metadata:
       labels:
-        app: trivia-frontend
+        app: {{ .Values.appname }}
     spec:
       containers:
-      - name: trivia-frontend
-        image: akadirvel1/trivia-frontend:latest
-        imagePullPolicy: Always # Always pull the latest image
-        ports:
-        - containerPort: 80
+        - name: {{ .Values.appname }}
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
