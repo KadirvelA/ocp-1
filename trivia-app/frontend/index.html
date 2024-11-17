@@ -57,6 +57,7 @@
     canvas {
       max-width: 500px;
       margin-top: 30px;
+      margin-bottom: 50px; /* Adjust bottom margin for visibility */
     }
   </style>
 </head>
@@ -95,9 +96,15 @@
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false, // Ensure responsiveness and better fit
         scales: {
           y: {
             beginAtZero: true
+          },
+          x: {
+            ticks: {
+              padding: 10 // Add padding between the chart and the x-axis labels
+            }
           }
         }
       }
