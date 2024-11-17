@@ -11,6 +11,9 @@ spec:
     repoURL: 'https://github.com/akadmin-ai/trivia-gitops-demo.git'
     targetRevision: HEAD
     path: trivia-app/k8s
+    helm:
+      valueFiles:
+         - trivia-app/k8s/values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: trivia-frontend
