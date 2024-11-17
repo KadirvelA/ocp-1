@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Voting App</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Add Chart.js -->
   <style>
     body {
       margin: 0;
@@ -53,6 +54,10 @@
     .results {
       margin-top: 20px;
     }
+    canvas {
+      max-width: 500px;
+      margin-top: 30px;
+    }
   </style>
 </head>
 <body>
@@ -69,14 +74,39 @@
       <strong>Results:</strong>
       <div id="results"></div>
     </div>
+    <!-- Chart.js Graph -->
+    <canvas id="votesChart"></canvas>
   </div>
 
   <script>
     const votes = {};
+    const ctx = document.getElementById('votesChart').getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Terraform', 'Kubernetes', 'Docker'],
+        datasets: [{
+          label: 'Votes',
+          data: [0, 0, 0], // Initial data, will update dynamically
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
 
     function vote(option) {
       votes[option] = (votes[option] || 0) + 1;
       displayResults();
+      updateChart();
     }
 
     function displayResults() {
@@ -84,6 +114,16 @@
       resultsDiv.innerHTML = Object.entries(votes)
         .map(([key, value]) => `<p>${key}: ${value} votes</p>`)
         .join('');
+    }
+
+    function updateChart() {
+      // Update chart data
+      chart.data.datasets[0].data = [
+        votes['Terraform'] || 0,
+        votes['Kubernetes'] || 0,
+        votes['Docker'] || 0
+      ];
+      chart.update(); // Refresh the chart
     }
   </script>
 </body>
