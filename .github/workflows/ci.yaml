@@ -28,7 +28,7 @@ jobs:
 
     - name: Build and Push Docker Image
       run: |
-          docker build -t akadirvel1/trivia-frontend:${{ github.sha }} .
+          docker build -t akadirvel1/trivia-frontend:${{ github.sha }} trivia-app/frontend
           docker push akadirvel1/trivia-frontend:${{ github.sha }}
 
     - name: Update Image Tag in Helm Chart
