@@ -29,7 +29,7 @@ jobs:
     # Build and push frontend image
     - name: Build and push frontend Docker image
       run: |
-        docker build -t akadirvel1/trivia-frontend:latest trivia-app/frontend
+        docker build --no-cache -t akadirvel1/trivia-frontend:latest trivia-app/frontend
         docker push akadirvel1/trivia-frontend:latest
 
    
