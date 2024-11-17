@@ -41,19 +41,6 @@ jobs:
       run: |
           git config --global user.name 'Kadirvel'
           git config --global user.email 'a.kadirvel@gmail.com'
-          git add trivia-app/k8s/values.yaml
-
-          # Ensure we're working with the main branch (or any relevant branch)
-          git checkout main
-      
-          # Fetch latest changes from the remote repository
-          git fetch origin
-      
-          # Force reset to match the remote branch, discarding local changes
-          git reset --hard origin/main
-      
-          # Pull the latest changes to ensure everything is in sync
-          git pull origin main
-          # Commit and push changes if any are present
-          git commit -am "Committing changes before pushing"
-          git push origin main
+           git pull
+           git commit -am "updating image tag"
+           git push
