@@ -54,10 +54,17 @@
     .results {
       margin-top: 20px;
     }
-    canvas {
+    /* Adjust canvas styles */
+    .chart-container {
+      position: relative;
+      width: 100%;
+      height: 300px; /* Set a fixed height for the canvas */
       max-width: 500px;
-      margin-top: 30px;
-      margin-bottom: 50px; /* Adjust bottom margin for visibility */
+      overflow: hidden;
+    }
+    canvas {
+      width: 100%;
+      height: 100%;
     }
   </style>
 </head>
@@ -76,7 +83,9 @@
       <div id="results"></div>
     </div>
     <!-- Chart.js Graph -->
-    <canvas id="votesChart"></canvas>
+    <div class="chart-container">
+      <canvas id="votesChart"></canvas>
+    </div>
   </div>
 
   <script>
@@ -128,7 +137,8 @@
       chart.data.datasets[0].data = [
         votes['Terraform'] || 0,
         votes['Kubernetes'] || 0,
-        votes['Docker'] || 0
+        votes['Docker'] || 0,
+        votes['GitOps'] || 0
       ];
       chart.update(); // Refresh the chart
     }
