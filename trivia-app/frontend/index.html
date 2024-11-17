@@ -9,9 +9,8 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: url('devops.gif') no-repeat center center fixed;
-      background-size: cover;
-      color: white;
+      background-color: #90ee90; /* Light green background */
+      color: black; /* Change text color to black for better contrast */
       text-align: center;
       overflow: hidden;
     }
@@ -43,13 +42,13 @@
     }
     .option {
       padding: 10px 20px;
-      border: 2px solid white;
+      border: 2px solid black; /* Change border color to black for contrast */
       border-radius: 5px;
       cursor: pointer;
-      background-color: rgba(255, 255, 255, 0.1);
+      background-color: rgba(0, 0, 0, 0.2); /* Slight transparent background for options */
     }
     .option:hover {
-      background-color: rgba(255, 255, 255, 0.2);
+      background-color: rgba(0, 0, 0, 0.3);
     }
     .results {
       margin-top: 20px;
@@ -178,7 +177,6 @@
     generateOptions();
 
     // Example usage:
-    addTool('Ansible');
     // addTool('Ansible'); // Add new tool
     // removeTool('Docker'); // Remove existing tool
   </script>
