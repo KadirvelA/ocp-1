@@ -41,7 +41,7 @@ jobs:
       run: |
           git config --global user.name 'Kadirvel'
           git config --global user.email 'a.kadirvel@gmail.com'
-          git add k8s/values.yaml
+          git add trivia-app/k8s/values.yaml
 
           # Ensure we're working with the main branch (or any relevant branch)
           git checkout main
