@@ -44,5 +44,10 @@ jobs:
           git pull --rebase
           git add k8s/values.yaml
           git commit -m "Updating image tag to ${{ github.sha }}"
-          git push
-   
+    - name: Pull latest changes
+      run: |
+        git pull origin main
+
+    - name: Push changes to remote
+      run: |
+        git push origin main
