@@ -1,5 +1,5 @@
 image:
   repository: akadirvel1/trivia-frontend
-  tag: e94cc3edcde2f86d09d73b8de98dd2d34b895c31
+  tag: 756ced97eb297fb4a755a8ac90474172f013e334
 appname: trivia-frontend
 replicas: 1
