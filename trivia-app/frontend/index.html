@@ -1,137 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simple Trivia App</title>
-  <style>
-    /* Apply a dark overlay on the background image */
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background-image: url('devops.gif');
-      background-size: cover;
-      background-position: center;
-      margin: 0;
-      padding: 20px;
-      height: 100vh;
-      color: white;
-    }
-    
-    /* Dark overlay to make the content more readable */
-    .overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.7); /* Dark, semi-transparent overlay */
-      z-index: -1;
-    }
-
-    h1 {
-      color: #fff;
-      margin-top: 20px;
-      font-size: 36px;
-      font-weight: bold;
-    }
-
-    #question {
-      margin-top: 20px;
-      font-size: 18px;
-      color: #fff;
-    }
-
-    #options {
-      margin-top: 20px;
-    }
-
-    button {
-      margin: 5px;
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      background-color: #4caf50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-    }
-
-    button:hover {
-      background-color: #45a049;
-    }
-    
-    /* Styling the buttons with dark theme */
-    button {
-      background-color: #333;
-      color: white;
-      border: none;
-      border-radius: 5px;
-    }
-
-    button:hover {
-      background-color: #444;
-    }
-    
-    /* Styling the question and button container */
-    #options button {
-      margin: 10px;
-      background-color: #444;
-    }
-
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitOps Trivia App</title>
+    <style>
+        body {
+            background-color: #2c2f33;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-image: url('devops.gif');
+            background-size: cover;
+            background-position: center;
+        }
+        .question {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        .question h3 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+        .question p {
+            margin: 10px 0 0;
+            font-size: 1.2em;
+        }
+    </style>
 </head>
 <body>
-  <!-- Overlay div to darken the background image -->
-  <div class="overlay"></div>
-
-  <h1>Welcome to the Trivia App!</h1>
-  <div id="question">Click the button to get a trivia question!</div>
-  <div id="options"></div>
-  <button onclick="generateTrivia()">Get a New Question</button>
-
-  <script>
-    const triviaQuestions = [
-      {
-        question: "What is the capital of France?",
-        options: ["Paris", "London", "Berlin", "Madrid"],
-        answer: "Paris"
-      },
-      {
-        question: "Which planet is known as the Red Planet?",
-        options: ["Earth", "Mars", "Jupiter", "Venus"],
-        answer: "Mars"
-      },
-      {
-        question: "Who wrote 'Hamlet'?",
-        options: ["Charles Dickens", "J.K. Rowling", "William Shakespeare", "Mark Twain"],
-        answer: "William Shakespeare"
-      },
-      {
-        question: "What is the largest ocean on Earth?",
-        options: ["Atlantic", "Indian", "Pacific", "Arctic"],
-        answer: "Pacific"
-      },
-      {
-        question: "What year did World War II end?",
-        options: ["1945", "1939", "1950", "1940"],
-        answer: "1945"
-      }
-    ];
-
-    function generateTrivia() {
-      const trivia = triviaQuestions[Math.floor(Math.random() * triviaQuestions.length)];
-      document.getElementById('question').textContent = trivia.question;
-      
-      const optionsDiv = document.getElementById('options');
-      optionsDiv.innerHTML = '';
-      trivia.options.forEach(option => {
-        const button = document.createElement('button');
-        button.textContent = option;
-        button.onclick = () => alert(option === trivia.answer ? 'Correct!' : 'Wrong Answer!');
-        optionsDiv.appendChild(button);
-      });
-    }
-  </script>
+    <h1>Welcome to the GitOps Trivia App!</h1>
+    <div class="question">
+        <h3>1. What is GitOps?</h3>
+        <p>A way to manage infrastructure using Git as the source of truth.</p>
+    </div>
+    <div class="question">
+        <h3>2. What are GitOps principles?</h3>
+        <p>Declarative, version-controlled, automated, and monitored.</p>
+    </div>
+    <div class="question">
+        <h3>3. Why use GitOps?</h3>
+        <p>For consistency, automation, and quick rollbacks.</p>
+    </div>
+    <div class="question">
+        <h3>4. What tools support GitOps?</h3>
+        <p>ArgoCD, Flux, Jenkins X, etc.</p>
+    </div>
+    <div class="question">
+        <h3>5. How does GitOps manage rollbacks?</h3>
+        <p>By reverting to previous Git commits.</p>
+    </div>
+    <div class="question">
+        <h3>6. Difference between CI/CD and GitOps?</h3>
+        <p>CI/CD triggers pipelines, GitOps syncs directly from Git.</p>
+    </div>
+    <div class="question">
+        <h3>7. What is ArgoCD?</h3>
+        <p>A tool to deploy apps via Git in Kubernetes.</p>
+    </div>
+    <div class="question">
+        <h3>8. How does GitOps ensure consistency?</h3>
+        <p>By reconciling actual vs. desired states.</p>
+    </div>
+    <div class="question">
+        <h3>9. Is GitOps secure?</h3>
+        <p>Yes, changes are tracked in Git with clear audit trails.</p>
+    </div>
+    <div class="question">
+        <h3>10. Can GitOps work outside Kubernetes?</h3>
+        <p>Yes, with appropriate tools for other environments.</p>
+    </div>
 </body>
 </html>
