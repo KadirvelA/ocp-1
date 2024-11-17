@@ -33,7 +33,7 @@ jobs:
 
     - name: Update Image Tag in Helm Chart
       run: |
-          chart_dir="trivia-app/k8s"
+          chart_dir="app-chart"
           new_image_tag=${{ github.sha }}
           sed -i "s/^  tag: .*/  tag: $new_image_tag/" "$chart_dir/values.yaml"
 
