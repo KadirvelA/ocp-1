@@ -1,75 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevOps Voting App</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: url('devops.gif') no-repeat center center fixed;
-            background-size: cover;
-            color: #ffffff;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
-        h1 {
-            margin-top: 20px;
-            font-size: 3rem;
-        }
-        .vote-container {
-            margin: 20px auto;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.6);
-            border-radius: 10px;
-            display: inline-block;
-        }
-        .vote-button {
-            display: block;
-            margin: 10px auto;
-            padding: 10px 20px;
-            font-size: 1.5rem;
-            color: #000;
-            background-color: #f8b400;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .vote-button:hover {
-            background-color: #d49c00;
-        }
-        .votes {
-            font-size: 1.5rem;
-            margin-top: 10px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voting App</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('devops.gif') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      text-align: center;
+      overflow: hidden;
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7); /* Dark overlay */
+      z-index: -1;
+    }
+    h1 {
+      margin-top: 20px;
+    }
+    .vote-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      margin-top: 50px;
+    }
+    .topic {
+      font-size: 24px;
+    }
+    .options {
+      display: flex;
+      gap: 15px;
+    }
+    .option {
+      padding: 10px 20px;
+      border: 2px solid white;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    .option:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    .results {
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-    <h1>DevOps Voting App</h1>
-    <div class="vote-container">
-        <h2>Vote for your favorite tool:</h2>
-        <button class="vote-button" onclick="vote('Kubernetes')">Kubernetes</button>
-        <p class="votes" id="votes-kubernetes">Votes: 0</p>
-        
-        <button class="vote-button" onclick="vote('Docker')">Docker</button>
-        <p class="votes" id="votes-docker">Votes: 0</p>
-        
-        <button class="vote-button" onclick="vote('GitOps')">GitOps</button>
-        <p class="votes" id="votes-gitops">Votes: 0</p>
+  <div class="overlay"></div>
+  <h1>Live Voting App</h1>
+  <div class="vote-container">
+    <div class="topic">What is your favorite DevOps tool?</div>
+    <div class="options">
+      <div class="option" onclick="vote('Terraform')">Terraform</div>
+      <div class="option" onclick="vote('Kubernetes')">Kubernetes</div>
+      <div class="option" onclick="vote('Docker')">Docker</div>
     </div>
+    <div class="results">
+      <strong>Results:</strong>
+      <div id="results"></div>
+    </div>
+  </div>
 
-    <script>
-        const votes = {
-            Kubernetes: 0,
-            Docker: 0,
-            GitOps: 0
-        };
+  <script>
+    const votes = {};
 
-        function vote(tool) {
-            votes[tool]++;
-            document.getElementById(`votes-${tool.toLowerCase()}`).innerText = `Votes: ${votes[tool]}`;
-        }
-    </script>
+    function vote(option) {
+      votes[option] = (votes[option] || 0) + 1;
+      displayResults();
+    }
+
+    function displayResults() {
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = Object.entries(votes)
+        .map(([key, value]) => `<p>${key}: ${value} votes</p>`)
+        .join('');
+    }
+  </script>
 </body>
 </html>
