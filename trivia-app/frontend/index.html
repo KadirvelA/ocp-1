@@ -73,10 +73,8 @@
   <h1>Live Voting App</h1>
   <div class="vote-container">
     <div class="topic">What is your favorite DevOps tool?</div>
-    <div class="options">
-      <div class="option" onclick="vote('Terraform')">Terraform</div>
-      <div class="option" onclick="vote('Kubernetes')">Kubernetes</div>
-      <div class="option" onclick="vote('Docker')">Docker</div>
+    <div class="options" id="options">
+      <!-- Options will be dynamically generated here -->
     </div>
     <div class="results">
       <strong>Results:</strong>
@@ -90,14 +88,18 @@
 
   <script>
     const votes = {};
+    const tools = ['Terraform', 'Kubernetes', 'Docker']; // Initial tools array
+    const optionsDiv = document.getElementById('options');
+
+    // Initialize the chart
     const ctx = document.getElementById('votesChart').getContext('2d');
     const chart = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['Terraform', 'Kubernetes', 'Docker'],
+        labels: tools,
         datasets: [{
           label: 'Votes',
-          data: [0, 0, 0], // Initial data, will update dynamically
+          data: new Array(tools.length).fill(0), // Initialize data array with 0 votes for each tool
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgba(54, 162, 235, 1)',
           borderWidth: 1
@@ -119,12 +121,26 @@
       }
     });
 
+    // Function to generate voting options
+    function generateOptions() {
+      optionsDiv.innerHTML = ''; // Clear existing options
+      tools.forEach(tool => {
+        const optionDiv = document.createElement('div');
+        optionDiv.className = 'option';
+        optionDiv.textContent = tool;
+        optionDiv.onclick = () => vote(tool);
+        optionsDiv.appendChild(optionDiv);
+      });
+    }
+
+    // Function to handle vote logic
     function vote(option) {
       votes[option] = (votes[option] || 0) + 1;
       displayResults();
       updateChart();
     }
 
+    // Function to display voting results
     function displayResults() {
       const resultsDiv = document.getElementById('results');
       resultsDiv.innerHTML = Object.entries(votes)
@@ -132,16 +148,39 @@
         .join('');
     }
 
+    // Function to update the chart
     function updateChart() {
-      // Update chart data
-      chart.data.datasets[0].data = [
-        votes['Terraform'] || 0,
-        votes['Kubernetes'] || 0,
-        votes['Docker'] || 0,
-        votes['GitOps'] || 0
-      ];
+      chart.data.labels = tools;
+      chart.data.datasets[0].data = tools.map(tool => votes[tool] || 0);
       chart.update(); // Refresh the chart
     }
+
+    // Function to add a new tool
+    function addTool(toolName) {
+      if (!tools.includes(toolName)) {
+        tools.push(toolName);
+        generateOptions(); // Regenerate options after adding tool
+        updateChart(); // Update chart after adding tool
+      }
+    }
+
+    // Function to remove a tool
+    function removeTool(toolName) {
+      const index = tools.indexOf(toolName);
+      if (index !== -1) {
+        tools.splice(index, 1);
+        generateOptions(); // Regenerate options after removing tool
+        updateChart(); // Update chart after removing tool
+      }
+    }
+
+    // Initialize the app with existing tools
+    generateOptions();
+
+    // Example usage:
+    addTool('Ansible');
+    // addTool('Ansible'); // Add new tool
+    // removeTool('Docker'); // Remove existing tool
   </script>
 </body>
 </html>
