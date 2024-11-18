@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - trivia-app
+      - trivia-app/frontend/index.html
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
