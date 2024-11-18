@@ -87,7 +87,7 @@
 
   <script>
     const votes = {};
-    const tools = ['Terraform', 'Kubernetes', 'Docker']; // Initial tools array
+    const tools = ['Terraform', 'Kubernetes', 'Docker']; 
     const optionsDiv = document.getElementById('options');
 
     // Initialize the chart
@@ -98,7 +98,7 @@
         labels: tools,
         datasets: [{
           label: 'Votes',
-          data: new Array(tools.length).fill(0), // Initialize data array with 0 votes for each tool
+          data: new Array(tools.length).fill(0), 
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgba(54, 162, 235, 1)',
           borderWidth: 1
@@ -106,14 +106,14 @@
       },
       options: {
         responsive: true,
-        maintainAspectRatio: false, // Ensure responsiveness and better fit
+        maintainAspectRatio: false, 
         scales: {
           y: {
             beginAtZero: true
           },
           x: {
             ticks: {
-              padding: 10 // Add padding between the chart and the x-axis labels
+              padding: 10 
             }
           }
         }
@@ -122,7 +122,7 @@
 
     // Function to generate voting options
     function generateOptions() {
-      optionsDiv.innerHTML = ''; // Clear existing options
+      optionsDiv.innerHTML = ''; 
       tools.forEach(tool => {
         const optionDiv = document.createElement('div');
         optionDiv.className = 'option';
@@ -151,15 +151,15 @@
     function updateChart() {
       chart.data.labels = tools;
       chart.data.datasets[0].data = tools.map(tool => votes[tool] || 0);
-      chart.update(); // Refresh the chart
+      chart.update(); 
     }
 
     // Function to add a new tool
     function addTool(toolName) {
       if (!tools.includes(toolName)) {
         tools.push(toolName);
-        generateOptions(); // Regenerate options after adding tool
-        updateChart(); // Update chart after adding tool
+        generateOptions(); 
+        updateChart(); 
       }
     }
 
@@ -168,17 +168,17 @@
       const index = tools.indexOf(toolName);
       if (index !== -1) {
         tools.splice(index, 1);
-        generateOptions(); // Regenerate options after removing tool
-        updateChart(); // Update chart after removing tool
+        generateOptions(); 
+        updateChart(); 
       }
     }
 
-    // Initialize the app with existing tools
+ 
     generateOptions();
 
     // Example usage:
     addTool('Ansible');
-    removeTool('Docker');
+    addTool('GitOps')
     // addTool('Ansible'); // Add new tool
     // removeTool('Docker'); // Remove existing tool
   </script>
