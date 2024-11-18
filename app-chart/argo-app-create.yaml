@@ -1,5 +1,3 @@
-#    repoURL: 'https://github.com/akadmin-ai/trivia-gitops-demo.git'
- 
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -8,9 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/akadmin-ai/trivia-gitops-demo.git'
+    repoURL: 'https://github.com/akadmin-ai/aks-demo.git'
     targetRevision: HEAD
-    path: trivia-app/k8s
+    path: app-chart
     helm:
       valueFiles:
          - values.yaml
