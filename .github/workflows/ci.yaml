@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - main
-
+    paths:
+      - trivia-app
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
