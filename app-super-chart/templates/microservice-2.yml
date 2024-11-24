@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: MicroService-2
+  name: microservice-2
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: 'https://github.com/akadmin-ai/aks-demo.git'
     targetRevision: HEAD
-    path: app-chart-1
+    path: app-chart-2
     helm:
       valueFiles:
          - values.yaml
