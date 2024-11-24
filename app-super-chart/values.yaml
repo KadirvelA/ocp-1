@@ -1,0 +1,5 @@
+image:
+  repository: akadirvel1/trivia-frontend
+  tag: ad3a00283443a4c3ec0ffad7821f63644bcd9da2
+appname: Master Application
+replicas: 1
