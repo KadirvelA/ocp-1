@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: super-chart
+  name: superchart
   namespace: argocd
 spec:
   project: default
@@ -14,7 +14,7 @@ spec:
          - values.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: super-chart
+    namespace: superchart
   syncPolicy:
     automated:
       prune: true

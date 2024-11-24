@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: microservice-2
+  name: microservic2
   namespace: argocd
 spec:
   project: default
@@ -14,7 +14,7 @@ spec:
          - values.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: microservice-2
+    namespace: microservice2
   syncPolicy:
     automated:
       prune: true
