@@ -2,8 +2,10 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: "{{ .Values.appname }}"
+  annotations:
+    kubernetes.io/ingress.class: "nginx" # Use nginx ingress class or "haproxy" if using OpenShift default
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-  ingressClassName: nginx
   rules:
     - host: gitops-demo.com
       http:
