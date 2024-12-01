@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: superchart
-  namespace: argocd
+  namespace: argocd-latest
 spec:
   project: default
   source:
