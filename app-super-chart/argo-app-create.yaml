@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/akadmin-ai/aks-demo.git'
+    repoURL: 'https://github.com/KadirvelA/ocp-1.git'
     targetRevision: HEAD
     path: app-super-chart
     helm:
