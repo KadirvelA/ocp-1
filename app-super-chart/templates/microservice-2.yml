@@ -14,7 +14,7 @@ spec:
          - values.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: microservice2
+    namespace: microservice-2
   syncPolicy:
     automated:
       prune: true
