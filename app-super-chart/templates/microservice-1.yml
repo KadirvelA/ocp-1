@@ -2,9 +2,9 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: microservice-1
-  namespace: argocd
+  namespace: microservice-1
 spec:
-  project: default
+  project: microservice-1
   source:
     repoURL: 'https://github.com/KadirvelA/ocp-1.git'
     targetRevision: HEAD
